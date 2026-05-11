@@ -5,7 +5,7 @@ class AuthService {
 
   Future<User?> signInAnonymously() async {
     try {
-      UserCredential userCredential = await _auth.signInAnonymously();
+      final userCredential = await _auth.signInAnonymously();
       return userCredential.user;
     } catch (e) {
       return null;

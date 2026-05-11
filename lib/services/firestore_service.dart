@@ -17,12 +17,11 @@ class FirestoreService {
 
   Future<void> initializeUserProgress() async {
     final userRef = _db.collection('users').doc(userId);
-
     final userDoc = await userRef.get();
 
     if (!userDoc.exists) {
       await userRef.set({
-        'name': 'Young Learner',
+        'child_name': '',
         'created_at': FieldValue.serverTimestamp(),
       });
 
@@ -56,6 +55,29 @@ class FirestoreService {
         'stars': 0,
       });
     }
+  }
+
+  Future<bool> hasChildName() async {
+    final doc = await _db.collection('users').doc(userId).get();
+    final data = doc.data();
+
+    if (data == null) return false;
+
+    final name = data['child_name'] ?? '';
+    return name.toString().trim().isNotEmpty;
+  }
+
+  Future<void> saveChildName(String name) async {
+    await _db.collection('users').doc(userId).update({
+      'child_name': name.trim(),
+    });
+  }
+
+  Future<String> getChildName() async {
+    final doc = await _db.collection('users').doc(userId).get();
+    final data = doc.data();
+
+    return data?['child_name'] ?? 'Learner';
   }
 
   Future<void> completeLesson(String category) async {

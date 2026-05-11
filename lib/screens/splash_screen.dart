@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'home_screen.dart';
-import '../services/firestore_service.dart';
+import 'name_setup_screen.dart';
 import '../services/auth_service.dart';
+import '../services/firestore_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,19 +21,38 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> setupApp() async {
     try {
-await AuthService().signInAnonymously();
-await FirestoreService().initializeUserProgress();    } catch (e) {
-      debugPrint('Firestore setup failed: $e');
+      await AuthService().signInAnonymously();
+      await FirestoreService().initializeUserProgress();
+
+      final bool hasName = await FirestoreService().hasChildName();
+
+      await Future.delayed(const Duration(seconds: 2));
+
+      if (!mounted) return;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) {
+            if (hasName) {
+              return const HomeScreen();
+            } else {
+return NameSetupScreen();            }
+          },
+        ),
+      );
+    } catch (e) {
+      debugPrint('Setup failed: $e');
+
+      await Future.delayed(const Duration(seconds: 2));
+
+      if (!mounted) return;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
     }
-
-    await Future.delayed(const Duration(seconds: 2));
-
-    if (!mounted) return;
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
-    );
   }
 
   @override
@@ -56,7 +77,6 @@ await FirestoreService().initializeUserProgress();    } catch (e) {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -76,9 +96,7 @@ await FirestoreService().initializeUserProgress();    } catch (e) {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 8),
-
                 const Text(
                   'Learning through play',
                   style: TextStyle(
@@ -86,9 +104,7 @@ await FirestoreService().initializeUserProgress();    } catch (e) {
                     color: Color(0xFF102A43),
                   ),
                 ),
-
                 const SizedBox(height: 35),
-
                 Container(
                   width: 210,
                   height: 210,
@@ -112,9 +128,7 @@ await FirestoreService().initializeUserProgress();    } catch (e) {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 35),
-
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -127,9 +141,7 @@ await FirestoreService().initializeUserProgress();    } catch (e) {
                     CircleAvatar(radius: 5, backgroundColor: Color(0xFF0796B8)),
                   ],
                 ),
-
                 const SizedBox(height: 22),
-
                 const Text(
                   'READY TO PLAY?',
                   style: TextStyle(
