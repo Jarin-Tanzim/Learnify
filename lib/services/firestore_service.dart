@@ -7,11 +7,9 @@ class FirestoreService {
 
   String get userId {
     final user = _auth.currentUser;
-
     if (user == null) {
       throw Exception('No user logged in');
     }
-
     return user.uid;
   }
 
@@ -25,35 +23,36 @@ class FirestoreService {
         'created_at': FieldValue.serverTimestamp(),
       });
 
-      await userRef.collection('progress').doc('alphabets').set({
-        'completed': 0,
-        'total': 9,
-        'stars': 0,
-      });
+      await _createProgressDocs(userRef);
+    } else {
+      await _createMissingProgressDocs(userRef);
+    }
+  }
 
-      await userRef.collection('progress').doc('numbers').set({
-        'completed': 0,
-        'total': 9,
-        'stars': 0,
-      });
+  Future<void> _createProgressDocs(DocumentReference userRef) async {
+    final categories = ['alphabets', 'numbers', 'colors', 'shapes', 'sounds'];
 
-      await userRef.collection('progress').doc('colors').set({
+    for (final category in categories) {
+      await userRef.collection('progress').doc(category).set({
         'completed': 0,
-        'total': 9,
-        'stars': 0,
+        'total': 3,
       });
+    }
+  }
 
-      await userRef.collection('progress').doc('shapes').set({
-        'completed': 0,
-        'total': 9,
-        'stars': 0,
-      });
+  Future<void> _createMissingProgressDocs(DocumentReference userRef) async {
+    final categories = ['alphabets', 'numbers', 'colors', 'shapes', 'sounds'];
 
-      await userRef.collection('progress').doc('sounds').set({
-        'completed': 0,
-        'total': 9,
-        'stars': 0,
-      });
+    for (final category in categories) {
+      final docRef = userRef.collection('progress').doc(category);
+      final doc = await docRef.get();
+
+      if (!doc.exists) {
+        await docRef.set({
+          'completed': 0,
+          'total': 3,
+        });
+      }
     }
   }
 
@@ -80,17 +79,26 @@ class FirestoreService {
     return data?['child_name'] ?? 'Learner';
   }
 
-  Future<void> completeLesson(String category) async {
+  Future<void> completeGame(String category) async {
     final progressRef = _db
         .collection('users')
         .doc(userId)
         .collection('progress')
         .doc(category);
 
-    await progressRef.update({
-      'completed': FieldValue.increment(1),
-      'stars': FieldValue.increment(1),
-    });
+    final doc = await progressRef.get();
+    final data = doc.data();
+
+    if (data == null) return;
+
+    final int completed = data['completed'] ?? 0;
+    final int total = data['total'] ?? 3;
+
+    if (completed < total) {
+      await progressRef.update({
+        'completed': FieldValue.increment(1),
+      });
+    }
   }
 
   Future<Map<String, dynamic>> getCategoryProgress(String category) async {

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/game_card.dart';
+import '../games/alphabet_game.dart';
+import '../games/find_letter_game.dart';
+import '../games/letter_sounds_game.dart';
 
 class CategoryScreen extends StatelessWidget {
   final String title;
@@ -39,6 +42,31 @@ class CategoryScreen extends StatelessWidget {
     if (title == 'Shapes') return 'Shapes & Patterns';
     return title;
   }
+
+  void openGame(BuildContext context, int index) {
+  if (title == 'Alphabets' && index == 0) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const AlphabetGame()),
+    );
+  } else if (title == 'Alphabets' && index == 1) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const FindLetterGame()),
+    );
+  } else if (title == 'Alphabets' && index == 2) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const LetterSoundsGame()),
+    );
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('This game will be added soon.'),
+      ),
+    );
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +178,7 @@ class CategoryScreen extends StatelessWidget {
                           ? const Color(0xFFC2185B)
                           : const Color(0xFF7A7500),
                   stars: i == 0 ? 2 : 1,
+                  onTap: () => openGame(context, i),
                 ),
 
               const SizedBox(height: 8),
@@ -193,7 +222,7 @@ class CategoryScreen extends StatelessWidget {
                       width: 48,
                       height: 6,
                       decoration: BoxDecoration(
-                        color: Color(0xFF7A7500),
+                        color: const Color(0xFF7A7500),
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
