@@ -3,6 +3,10 @@ import '../widgets/game_card.dart';
 import '../games/alphabet_game.dart';
 import '../games/find_letter_game.dart';
 import '../games/letter_sounds_game.dart';
+import '../games/count_objects_game.dart';
+import '../games/find_number_game.dart';
+import '../games/number_order_game.dart';
+
 
 class CategoryScreen extends StatelessWidget {
   final String title;
@@ -18,7 +22,7 @@ class CategoryScreen extends StatelessWidget {
     if (title == 'Alphabets') {
       return ['Match Letters', 'Find the Letter', 'Letter Sounds'];
     } else if (title == 'Numbers') {
-      return ['Count Objects', 'Find the Number', 'Number Match'];
+      return ['Count Objects', 'Find the Number', 'Number Order'];
     } else if (title == 'Colors') {
       return ['Match Colors', 'Find the Color', 'Color Mix'];
     } else if (title == 'Shapes') {
@@ -59,7 +63,23 @@ class CategoryScreen extends StatelessWidget {
       context,
       MaterialPageRoute(builder: (_) => const LetterSoundsGame()),
     );
-  } else {
+  } else if (title == 'Numbers' && index == 0) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const CountObjectsGame()),
+    );
+  } else if (title == 'Numbers' && index == 1) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (_) => const FindNumberGame()),
+  );
+  
+}else if (title == 'Numbers' && index == 2) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (_) => const NumberOrderGame()),
+  );
+}else {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('This game will be added soon.'),
