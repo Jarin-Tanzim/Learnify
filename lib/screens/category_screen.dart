@@ -6,7 +6,9 @@ import '../games/letter_sounds_game.dart';
 import '../games/count_objects_game.dart';
 import '../games/find_number_game.dart';
 import '../games/number_order_game.dart';
-
+import '../games/match_colors_game.dart';
+import '../games/color_picture_game.dart';
+import '../games/color_mix_game.dart';
 
 class CategoryScreen extends StatelessWidget {
   final String title;
@@ -24,7 +26,7 @@ class CategoryScreen extends StatelessWidget {
     } else if (title == 'Numbers') {
       return ['Count Objects', 'Find the Number', 'Number Order'];
     } else if (title == 'Colors') {
-      return ['Match Colors', 'Find the Color', 'Color Mix'];
+      return ['Match Colors', 'Color the Picture', 'Color Mix'];
     } else if (title == 'Shapes') {
       return ['Match Shapes', 'Find the Shape', 'Shape Puzzle'];
     } else {
@@ -79,7 +81,26 @@ class CategoryScreen extends StatelessWidget {
     context,
     MaterialPageRoute(builder: (_) => const NumberOrderGame()),
   );
-}else {
+  
+}else if (title == 'Colors' && index == 0) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (_) => const MatchColorsGame()),
+  );
+}
+else if (title == 'Colors' && index == 1) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (_) => const ColorPictureGame()),
+  );
+}
+else if (title == 'Colors' && index == 2) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (_) => const ColorMixGame()),
+  );
+}
+else {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('This game will be added soon.'),
