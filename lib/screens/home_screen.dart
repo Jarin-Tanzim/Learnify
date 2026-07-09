@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../widgets/app_header.dart';
 import '../widgets/category_card.dart';
-import '../widgets/sound_card.dart';
-import '../widgets/daily_adventure_card.dart';
 import 'category_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -111,20 +109,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-
-              const SizedBox(height: 16),
-
-              SoundCard(
-                onTap: () => openCategory(
-                  context,
-                  'Sounds',
-                  'Hear the world',
-                ),
-              ),
-
-              const SizedBox(height: 18),
-
-              const DailyAdventureCard(),
             ],
           ),
         ),
