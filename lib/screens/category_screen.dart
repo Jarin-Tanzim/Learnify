@@ -9,6 +9,10 @@ import '../games/number_order_game.dart';
 import '../games/match_colors_game.dart';
 import '../games/color_picture_game.dart';
 import '../games/color_mix_game.dart';
+import '../games/match_shapes_game.dart';
+import '../games/shape_builder_game.dart';
+import '../games/shape_hunt_game.dart';
+
 
 class CategoryScreen extends StatelessWidget {
   final String title;
@@ -21,19 +25,23 @@ class CategoryScreen extends StatelessWidget {
   });
 
   List<String> getGames() {
-    if (title == 'Alphabets') {
+  switch (title) {
+    case 'Alphabets':
       return ['Match Letters', 'Find the Letter', 'Letter Sounds'];
-    } else if (title == 'Numbers') {
-      return ['Count Objects', 'Find the Number', 'Number Order'];
-    } else if (title == 'Colors') {
-      return ['Match Colors', 'Color the Picture', 'Color Mix'];
-    } else if (title == 'Shapes') {
-      return ['Match Shapes', 'Find the Shape', 'Shape Puzzle'];
-    } else {
-      return ['Animal Sounds', 'Find the Sound', 'Sound Match'];
-    }
-  }
 
+    case 'Numbers':
+      return ['Count Objects', 'Find the Number', 'Number Order'];
+
+    case 'Colors':
+      return ['Match Colors', 'Color the Picture', 'Color Mix'];
+
+    case 'Shapes':
+      return ['Match Shapes', 'Shape Detective', 'Shape Hunt'];
+
+    default:
+      return [];
+  }
+}
   IconData getCategoryIcon() {
     if (title == 'Alphabets') return Icons.text_fields_rounded;
     if (title == 'Numbers') return Icons.calculate_rounded;
@@ -98,6 +106,28 @@ else if (title == 'Colors' && index == 2) {
   Navigator.push(
     context,
     MaterialPageRoute(builder: (_) => const ColorMixGame()),
+  );
+}
+else if (title == 'Shapes' && index == 0) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (_) => MatchShapesGame()),
+  );
+}
+else if (title == 'Shapes' && index == 1) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => const ShapeBuilderGame(),
+    ),
+  );
+}
+else if (title == 'Shapes' && index == 2) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => const ShapeHuntGame(),
+    ),
   );
 }
 else {
@@ -222,54 +252,7 @@ else {
                   onTap: () => openGame(context, i),
                 ),
 
-              const SizedBox(height: 8),
-
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(24),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
-                      blurRadius: 12,
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 16,
-                      backgroundColor: Color(0xFFFFF6C7),
-                      child: Icon(
-                        Icons.emoji_events_rounded,
-                        color: Colors.amber,
-                        size: 18,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    const Expanded(
-                      child: Text(
-                        'Keep it up!\nTotal Stars 3/9',
-                        style: TextStyle(
-                          fontSize: 13,
-                          height: 1.35,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF102A43),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 48,
-                      height: 6,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF7A7500),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              
             ],
           ),
         ),
