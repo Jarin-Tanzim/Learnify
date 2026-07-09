@@ -30,8 +30,7 @@ class FirestoreService {
   }
 
   Future<void> _createProgressDocs(DocumentReference userRef) async {
-    final categories = ['alphabets', 'numbers', 'colors', 'shapes', 'sounds'];
-
+final categories = ['alphabets', 'numbers', 'colors', 'shapes'];
     for (final category in categories) {
       await userRef.collection('progress').doc(category).set({
         'completed': 0,
