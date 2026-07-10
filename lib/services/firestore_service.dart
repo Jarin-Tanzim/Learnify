@@ -7,11 +7,20 @@ class FirestoreService {
 
   String get userId {
     final user = _auth.currentUser;
+
     if (user == null) {
       throw Exception('No user logged in');
     }
+
     return user.uid;
   }
+
+  final List<String> categories = [
+    'alphabets',
+    'numbers',
+    'colors',
+    'shapes',
+  ];
 
   Future<void> initializeUserProgress() async {
     final userRef = _db.collection('users').doc(userId);
@@ -30,7 +39,6 @@ class FirestoreService {
   }
 
   Future<void> _createProgressDocs(DocumentReference userRef) async {
-final categories = ['alphabets', 'numbers', 'colors', 'shapes'];
     for (final category in categories) {
       await userRef.collection('progress').doc(category).set({
         'completed': 0,
@@ -40,8 +48,6 @@ final categories = ['alphabets', 'numbers', 'colors', 'shapes'];
   }
 
   Future<void> _createMissingProgressDocs(DocumentReference userRef) async {
-    final categories = ['alphabets', 'numbers', 'colors', 'shapes', 'sounds'];
-
     for (final category in categories) {
       final docRef = userRef.collection('progress').doc(category);
       final doc = await docRef.get();
@@ -97,6 +103,20 @@ final categories = ['alphabets', 'numbers', 'colors', 'shapes'];
       await progressRef.update({
         'completed': FieldValue.increment(1),
       });
+    }
+  }
+
+  Future<void> resetProgress() async {
+    for (final category in categories) {
+      await _db
+          .collection('users')
+          .doc(userId)
+          .collection('progress')
+          .doc(category)
+          .set({
+        'completed': 0,
+        'total': 3,
+      }, SetOptions(merge: true));
     }
   }
 
